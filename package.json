@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "chatapp": "file:..",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

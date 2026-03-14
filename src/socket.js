@@ -5,9 +5,11 @@ import { app } from './app.js'
 const server = createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: ["http://localhost:5173"]
+        origin: ["http://localhost:5173", "https://yapster-frontend.vercel.app"],
+        methods: ["GET", "POST"],
+        credentials: true
     }
-})
+});
 
 
 const socketUserMap = {} // {userId: socketId} --- This map will contain all the users that are connected in real time.
