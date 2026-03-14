@@ -9,11 +9,21 @@ const app = express()
 
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.BASE_CLIENT_URL || 'https://yapster-frontend.vercel.app'
-]
+  'https://yapster-frontend.vercel.app',
+  process.env.BASE_CLIENT_URL
+].filter(Boolean).map((origin) => origin.replace(/\/$/, ''))
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true)
+
+    const normalizedOrigin = origin.replace(/\/$/, '')
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      return callback(null, true)
+    }
+
+    return callback(new Error('Not allowed by CORS'))
+  },
   credentials: true
 }));
 

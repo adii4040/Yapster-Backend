@@ -6,8 +6,9 @@ const server = createServer(app)
 
 const allowedOrigins = [
     'http://localhost:5173',
-    process.env.BASE_CLIENT_URL || 'https://yapster-frontend.vercel.app'
-]
+    'https://yapster-frontend.vercel.app',
+    process.env.BASE_CLIENT_URL
+].filter(Boolean).map((origin) => origin.replace(/\/$/, ''))
 
 const io = new Server(server, {
     cors: {
