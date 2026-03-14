@@ -1,11 +1,10 @@
 import dotenv from 'dotenv'
-dotenv.config({ path: path.resolve(__dirname, '../.env') })
+dotenv.config({ path: '.env' })
 
-import express from 'express'
 import { server } from './socket.js'
 import { app } from './app.js'
 import { connectDb } from './DB/db.js'
-import path from 'path'
+
 
 const port = process.env.PORT || 8080
 
