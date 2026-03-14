@@ -7,10 +7,14 @@ import cookieParser from 'cookie-parser'
 
 const app = express()
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.BASE_CLIENT_URL || 'https://yapster-frontend.vercel.app'
+]
 
 app.use(cors({
-    origin: "https://yapster-frontend.vercel.app",
-    credentials: true
+  origin: allowedOrigins,
+  credentials: true
 }));
 
 app.use(express.json({ limit: '16kb' }))
