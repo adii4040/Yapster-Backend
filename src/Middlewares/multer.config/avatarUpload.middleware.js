@@ -1,9 +1,15 @@
 import multer from 'multer'
 import { ApiError } from '../../utils/ApiError.utils.js'
 
+import fs from 'fs'
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/avatar')
+        const dir = './public/avatar'
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true })
+        }
+        cb(null, dir)
     },
     filename: function (req, file, cb) {
         const filename = `${Date.now()}-${file.originalname}`

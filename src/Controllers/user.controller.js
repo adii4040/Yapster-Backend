@@ -52,8 +52,9 @@ const registerUser = asyncHandler(async (req, res) => {
     await user.save({ validateBeforeSave: false })
 
     const userId = user._id.toString()
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Yapster <onboarding@resend.dev>";
     const mailOptions = {
-        from: "App Assistant <onboarding@resend.dev>",
+        from: fromEmail,
         to: user.email,
         subject: "Email Verification",
         mailgenContent: emailVerificationMailGen(
@@ -161,9 +162,13 @@ const verifyEmail = asyncHandler(async (req, res) => {
     user.emailVerificationToken = undefined
     user.emailVerificationTokenExpiry = undefined
     user.isEmailVerified = true
+    user.refreshToken = null
+    user.accessToken = null
     await user.save({ validateBeforeSave: false })
 
     return res.status(200)
+        .clearCookie("accessToken", cookieOption)
+        .clearCookie("refreshToken", cookieOption)
         .json(
             new ApiResponse(
                 200,
@@ -184,8 +189,9 @@ const resendEmailVerification = asyncHandler(async (req, res) => {
     await req.user.save({ validateBeforeSave: false })
 
     const userId = req.user._id.toString()
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Yapster <onboarding@resend.dev>";
     const mailOptions = {
-        from: "App Assistant <onboarding@resend.dev>",
+        from: fromEmail,
         to: req.user.email,
         subject: "Verify Your Email",
         mailgenContent: emailVerificationMailGen(
@@ -216,8 +222,9 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
     user.forgotPasswordTokenExpiry = hashedTokenExpiry
     await user.save({ validateBeforeSave: false })
 
+    const fromEmail = process.env.RESEND_FROM_EMAIL || "Yapster <onboarding@resend.dev>";
     const mailOptions = {
-        from: "App Assistant <onboarding@resend.dev>",
+        from: fromEmail,
         to: user.email,
         subject: "Reset Your Password",
         mailgenContent: forgotPasswordReqMailGen(
@@ -268,11 +275,6 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
 })
 
 const resetCurrentPassword = asyncHandler(async (req, res) => {
-    const { id } = req.params
-    if (id !== req.user._id.toString()) throw new ApiError(403, "Unauthorized request!!")
-
-    const { password } = req.body
-
     const user = await User.findById(req.user._id)
     if (!user) throw new ApiError(404, "No user found!!")
 
@@ -330,8 +332,9 @@ const updateUser = asyncHandler(async (req, res) => {
         user.emailVerificationTokenExpiry = hashedTokenExpiry
         await user.save({ validateBeforeSave: false })
         const userId = user._id.toString()
+        const fromEmail = process.env.RESEND_FROM_EMAIL || "Yapster <onboarding@resend.dev>";
         const mailOptions = {
-            from: "App Assistant <onboarding@resend.dev>",
+            from: fromEmail,
             to: user.email,
             subject: "Verify Your Email",
             mailgenContent: emailVerificationMailGen(

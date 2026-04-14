@@ -7,8 +7,8 @@ const sendMail = async (options) => {
     const mailGenerator = new Mailgen({
         theme: 'default',
         product: {
-            name: 'App assistant',
-            link: 'https://mailgen.js/'
+            name: 'Yapster',
+            link: 'https://yapster-frontend.vercel.app'
         }
     });
 
@@ -17,7 +17,7 @@ const sendMail = async (options) => {
 
 
     const mail = {
-        from: options.from || 'App Assistant <onboarding@resend.dev>', // Will change later when I'll get a domain
+        from: options.from || 'Yapster <onboarding@resend.dev>', // Will change later when I'll get a domain
         to: options.to,
         subject: options.subject,
         text: emailText, // plain text
@@ -49,7 +49,7 @@ const emailVerificationMailGen = (fullname, verificationUrl) => {
     return {
         body: {
             name: fullname,
-            intro: 'Welcome to Brickly! We\'re very excited to have you on app.',
+            intro: 'Welcome to Yapster! We\'re very excited to have you on the app.',
             action: {
                 instructions: 'To get your email verified , please click here:',
                 button: {
